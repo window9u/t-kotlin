@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres-todolist
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: your_password  # 원하는 비밀번호로 변경
+      POSTGRES_DB: todolist
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
