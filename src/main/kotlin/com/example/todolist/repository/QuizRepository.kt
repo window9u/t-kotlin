@@ -3,6 +3,7 @@ package com.example.todolist.repository
 import com.example.todolist.domain.ClassRoom
 import com.example.todolist.domain.Quiz
 import com.example.todolist.domain.QuizStatus
+import com.example.todolist.domain.User
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
@@ -11,7 +12,20 @@ import java.util.*
 
 @Repository
 interface QuizRepository: JpaRepository<Quiz,Long> {
-    fun findAllByClassRoomAndStatus(classRoom: ClassRoom,  status: QuizStatus): List<Quiz>
+    @Query("""
+        SELECT q FROM Quiz q
+        WHERE q.classRoom = :classRoom
+         AND q.status = :status
+         AND q.id NOT IN(
+            SELECT  ql.quiz.id FROM QuizLog ql
+            WHERE ql.user = :user
+         )
+    """)
+    fun findAllByClassRoomAndStatus(
+        @Param("classRoom") classRoom: ClassRoom,
+        @Param("user") user: User,
+        @Param("status") status: QuizStatus
+    ): List<Quiz>
 
     // 특정 Quiz ID로 Quiz와 그 Options를 Fetch Join으로 함께 가져오는 쿼리
     @Query("""

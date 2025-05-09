@@ -1,9 +1,6 @@
 package com.example.todolist.controller
 
-import com.example.todolist.dto.GetQuizResponse
-import com.example.todolist.dto.GetQuizzesResponse
-import com.example.todolist.dto.PostQuizRequest
-import com.example.todolist.dto.Quiz
+import com.example.todolist.dto.*
 import com.example.todolist.service.QuizService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -47,8 +44,10 @@ class QuizController(
         @PathVariable classId: Long,
         @RequestParam status: kotlin.String
     ): ResponseEntity<GetQuizzesResponse>{
+        val userId = SecurityContextHolder.getContext().authentication.principal as kotlin.String
         val quizzes = quizService.findQuizzes(
             classId = classId,
+            userId = userId,
             status = status
         )
 
@@ -82,10 +81,23 @@ class QuizController(
             id = quiz.id,
             description = quiz.description,
             options = optionsMap,
+            answerId = quiz.answer?.id,
             createdAt = quiz.createdAt
         )
 
         return ResponseEntity.ok(res)
+    }
+
+    @GetMapping("/{quizId}/result")
+    fun getQuizResult(
+        @PathVariable classId: Long,
+        @PathVariable quizId: Long
+    ): ResponseEntity<GetQuizResultResponse>{
+        val result = quizService.findQuizResult(
+            quizId = quizId
+        )
+
+        return ResponseEntity.ok(result)
     }
 
     @DeleteMapping("/{quizId}")
@@ -121,6 +133,21 @@ class QuizController(
         return ResponseEntity.status(200).build()
     }
 
+    @PostMapping("/{quizId}/log")
+    fun postQuizLog(
+        @PathVariable classId: Long,
+        @PathVariable quizId: Long,
+        @RequestParam optionId: Long,
+    ): ResponseEntity<Void> {
+        val userId = SecurityContextHolder.getContext().authentication.principal as String
 
+        quizService.submitQuiz(
+            quizId = quizId,
+            classId = classId,
+            userId = userId,
+            optionId = optionId
+        )
 
+        return ResponseEntity.status(200).build()
+    }
 }

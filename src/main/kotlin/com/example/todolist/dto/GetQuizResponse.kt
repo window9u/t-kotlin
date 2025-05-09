@@ -6,5 +6,6 @@ data class GetQuizResponse(
     val id: Long,
     val description: String,
     val options: Map<Long, String>,
+    val answerId: Long?,
     val createdAt: LocalDateTime?
 )
