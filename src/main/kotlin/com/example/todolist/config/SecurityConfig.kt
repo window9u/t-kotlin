@@ -46,7 +46,7 @@ class SecurityConfig (
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration()
-        configuration.allowedOrigins = listOf("http://localhost:5173") // 허용할 Origin
+        configuration.allowedOrigins = listOf("https://window9u.me", "http://localhost:5173") // 허용할 Origin
         configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS") // 허용할 HTTP 메서드
         configuration.allowedHeaders = listOf("Content-Type", "Authorization") // 허용할 헤더
         configuration.allowCredentials = true // Credentials 허용
