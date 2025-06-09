@@ -1,4 +1,4 @@
-# 1단계: 빌드 단계
+# 1단계: 의존성 다운로드 및 빌드 (캐싱 활용)
 FROM gradle:8.7-jdk17 AS builder
 WORKDIR /app
 COPY . .
