@@ -28,7 +28,7 @@ class SecurityConfig (
         http
             .csrf { it.disable() } // CSRF 보호 비활성화 (개발/테스트 용도)
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) } // 세션 사용 안 함
-            .cors { it.configurationSource(corsConfigurationSource()) } // CORS 설정 추가
+//            .cors { it.configurationSource(corsConfigurationSource()) } // CORS 설정 추가
             .authorizeHttpRequests { auth ->
                 auth
                     .requestMatchers("/auth/**").permitAll() // "/auth/**" 경로는 인증 없이 접근 가능
@@ -43,17 +43,17 @@ class SecurityConfig (
         return http.build()
     }
 
-    @Bean
-    fun corsConfigurationSource(): CorsConfigurationSource {
-        val configuration = CorsConfiguration()
-        configuration.allowedOrigins = listOf("https://window9u.me", "http://localhost:5173") // 허용할 Origin
-        configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS") // 허용할 HTTP 메서드
-        configuration.allowedHeaders = listOf("Content-Type", "Authorization") // 허용할 헤더
-        configuration.allowCredentials = true // Credentials 허용
-        val source = UrlBasedCorsConfigurationSource()
-        source.registerCorsConfiguration("/**", configuration) // 모든 경로에 대해 CORS 설정 적용
-        return source
-    }
+//    @Bean
+//    fun corsConfigurationSource(): CorsConfigurationSource {
+//        val configuration = CorsConfiguration()
+//        configuration.allowedOrigins = listOf("https://window9u.me", "http://localhost:5173") // 허용할 Origin
+//        configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS") // 허용할 HTTP 메서드
+//        configuration.allowedHeaders = listOf("Content-Type", "Authorization") // 허용할 헤더
+//        configuration.allowCredentials = true // Credentials 허용
+//        val source = UrlBasedCorsConfigurationSource()
+//        source.registerCorsConfiguration("/**", configuration) // 모든 경로에 대해 CORS 설정 적용
+//        return source
+//    }
 
     @Bean
     fun passwordEncoder(): BCryptPasswordEncoder {
