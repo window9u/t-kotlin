@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:16-alpine        # 최신이 아닌, 안정적인 버전 명시 추천
+    container_name: postgres-todolist
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: test-password-for-local
+      POSTGRES_DB: todolist
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  spring-app:
+    image: 711525442322.dkr.ecr.ap-northeast-2.amazonaws.com/window9u/graduate-demo:latest
+    container_name: spring-app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/todolist
+    depends_on:
+      - db
+
+  nginx-proxy:
+    image: nginx:latest
+    container_name: nginx-proxy
+    ports:
+      - "443:6666"
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf:ro # 표준 경로로 변경
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    depends_on:
+      - spring-app
+
+volumes:
+  db_data:
