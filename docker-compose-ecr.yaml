@@ -11,7 +11,7 @@ services:
       - db_data:/var/lib/postgresql/data
 
   spring-app:
-    image: 711525442322.dkr.ecr.ap-northeast-2.amazonaws.com/window9u/graduate-demo:latest
+    image: public.ecr.aws/d5e9f9m1/graduate/spring:latest
     container_name: spring-app
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/todolist
